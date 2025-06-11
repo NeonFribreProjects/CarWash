@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:kevjeff1@db:5432/carwash_prod
+      - REDIS_URL=redis://redis:6379
+      - VITE_API_URL=https://bookpal.ca/api
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=kevjeff1
+      - POSTGRES_DB=carwash_prod
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redisdata_prod:/data
+    restart: unless-stopped
+
+volumes:
+  pgdata_prod:
+  redisdata_prod:

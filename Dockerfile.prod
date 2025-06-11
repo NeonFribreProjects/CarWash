@@ -1,0 +1,40 @@
+FROM node:18-alpine AS frontend-builder
+WORKDIR /app/client
+COPY client/package*.json ./
+RUN npm install
+COPY client/ .
+RUN npm run build
+
+FROM node:18-alpine AS backend-builder
+WORKDIR /app/server
+# Add OpenSSL dependencies
+RUN apk add --no-cache \
+    openssl \
+    openssl-dev \
+    libc6-compat
+
+COPY server/package*.json ./
+COPY server/tsconfig.json ./
+RUN npm install
+COPY server/ .
+# Use transpile-only to match dev behavior
+RUN npx tsc && npx prisma generate
+
+FROM node:18-alpine
+WORKDIR /app
+
+# Install OpenSSL for Prisma
+RUN apk add --no-cache openssl
+
+# Copy built assets
+COPY --from=frontend-builder /app/client/dist ./client/dist
+COPY --from=backend-builder /app/server/dist ./server/dist
+COPY --from=backend-builder /app/server/package*.json ./server/
+COPY --from=backend-builder /app/server/node_modules ./server/node_modules
+COPY --from=backend-builder /app/server/prisma ./server/prisma
+
+# Set working directory
+WORKDIR /app/server
+
+EXPOSE 3000
+CMD ["npm", "run", "start:prod"]
