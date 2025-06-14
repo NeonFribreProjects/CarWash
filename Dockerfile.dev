@@ -16,15 +16,12 @@ WORKDIR /app
 COPY package*.json ./
 COPY client/package*.json ./client/
 COPY server/package*.json ./server/
+COPY . .
 
 # Install dependencies efficiently
-RUN npm install --no-audit --prefer-offline && \
-    cd server && \
-    npm install --no-audit --prefer-offline && \
-    cd ../client && npm install --no-audit --prefer-offline
-
-# Copy source code
-COPY . .
+RUN npm install --no-audit --prefer-offline \
+    && cd server && npm install --no-audit --prefer-offline \
+    && cd ../client && npm install --no-audit --prefer-offline
 
 # Generate Prisma client in server context
 WORKDIR /app/server
