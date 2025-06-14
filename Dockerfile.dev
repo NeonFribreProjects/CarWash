@@ -23,10 +23,6 @@ RUN npm install --no-audit --prefer-offline \
     && cd server && npm install --no-audit --prefer-offline \
     && cd ../client && npm install --no-audit --prefer-offline
 
-# Generate Prisma client in server context
-WORKDIR /app/server
-RUN npx prisma generate
-
 # Back to app root
 WORKDIR /app
 
