@@ -18,7 +18,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - NODE_ENV=development
       - VITE_API_URL=http://localhost:3001
-    command: npm run dev
+    entrypoint: ["/usr/local/bin/dev-entrypoint.sh"]  # Use the entrypoint script
     depends_on:
       - db
       - redis
