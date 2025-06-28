@@ -11,9 +11,11 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://app:3000',
+        target: 'http://app:80',
         changeOrigin: true,
         secure: false,
+        timeout: 10000,
+        proxyTimeout: 10000,
       },
     },
   },
