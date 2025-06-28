@@ -8,8 +8,8 @@ services:
     volumes:
       - .:/app
     ports:
-      - "5174:5174"  # Vite dev server
-      - "3001:3001"  # Backend API
+      - "5174:5173"  # Map host 5174 to container 5173 (Vite)
+      - "3001:80"    # Map host 3001 to container 80 (Backend)
     environment:
       - DATABASE_URL=postgresql://postgres:kevjeff1@db:5432/carwash_dev
       - REDIS_URL=redis://redis:6379
