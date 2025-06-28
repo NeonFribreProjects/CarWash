@@ -23,25 +23,19 @@ cd /app/server
 echo "Removing old Prisma installation..."
 rm -rf node_modules/.prisma node_modules/@prisma node_modules/prisma 2>/dev/null || true
 
-# Force reinstall ONLY Prisma packages with explicit add
+# Force reinstall ONLY Prisma packages
 echo "Force reinstalling Prisma 5.22.0..."
 npm install prisma@5.22.0 @prisma/client@5.22.0 --save --force --no-audit
 
-# Verify the installation
-echo "Verifying Prisma installation..."
-if [ -f "./node_modules/.bin/prisma" ]; then
-    echo "✅ Prisma binary found!"
-    ./node_modules/.bin/prisma --version
-    
-    # Generate Prisma client
-    echo "Generating Prisma client..."
-    ./node_modules/.bin/prisma generate
-    
-    echo "✅ Prisma setup completed successfully"
-else
-    echo "❌ Prisma binary not found, using npx fallback..."
-    npx prisma@5.22.0 generate
-fi
+# Run database migrations to fix schema
+echo "Running database migrations..."
+npx prisma@5.22.0 migrate deploy --force
+
+# Generate Prisma client
+echo "Generating Prisma client..."
+npx prisma@5.22.0 generate
+
+echo "✅ Prisma setup completed successfully"
 
 # Start development servers from project root
 cd /app && npm run dev
