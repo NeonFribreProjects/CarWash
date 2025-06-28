@@ -23,13 +23,13 @@ echo "Prisma directory:"
 ls -la node_modules/@prisma/ 2>/dev/null || echo "No @prisma directory found"
 echo "=================="
 
-# Since Prisma client is already installed, just generate it
+# Generate Prisma client with explicit schema path
 echo "Generating Prisma client..."
-npx prisma generate
+npx prisma generate --schema=./prisma/schema.prisma
 
-# Reset database and migrations
+# Reset database and migrations with explicit schema path
 echo "Resetting database and migrations..."
-npx prisma migrate reset --force --skip-generate
+npx prisma migrate reset --force --skip-generate --schema=./prisma/schema.prisma
 
 echo "Prisma setup completed successfully"
 
