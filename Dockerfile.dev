@@ -18,8 +18,14 @@ COPY client/package*.json ./client/
 COPY server/package*.json ./server/
 COPY . .
 
+# Force clean installation - remove any existing node_modules
+RUN rm -rf node_modules server/node_modules client/node_modules
+
 # Install dependencies using workspace-aware command
 RUN npm install --workspaces --include-workspace-root --no-audit --prefer-offline
+
+# Force reinstall server dependencies to ensure version alignment
+RUN cd server && rm -rf node_modules && npm install --no-audit --prefer-offline
 
 # Back to app root
 WORKDIR /app
