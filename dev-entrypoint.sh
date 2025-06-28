@@ -19,20 +19,11 @@ echo "Current directory: $(pwd)"
 echo "=== DEBUG INFO ==="
 echo "Node version: $(node --version)"
 echo "NPM version: $(npm --version)"
-echo "Package.json dependencies:"
-cat package.json | grep -A 20 '"dependencies"'
-echo "Node modules contents:"
-ls -la node_modules/ | head -10
 echo "Prisma directory:"
 ls -la node_modules/@prisma/ 2>/dev/null || echo "No @prisma directory found"
 echo "=================="
 
-# Force clean install
-echo "Performing clean install..."
-rm -rf node_modules package-lock.json
-npm install
-
-# Generate Prisma client
+# Since Prisma client is already installed, just generate it
 echo "Generating Prisma client..."
 npx prisma generate
 
