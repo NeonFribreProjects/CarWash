@@ -12,12 +12,12 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# Copy ONLY package files first
+# Copy package files
 COPY package*.json ./
 COPY client/package*.json ./client/
 COPY server/package*.json ./server/
 
-# Install root dependencies WITHOUT workspaces
+# Install dependencies
 RUN npm install --no-workspaces --no-audit --prefer-offline
 
 # Install server dependencies in complete isolation
@@ -26,8 +26,8 @@ RUN cd server && npm install --no-audit --prefer-offline --force
 # Install client dependencies
 RUN cd client && npm install --no-audit --prefer-offline
 
-# NOW copy the rest of the application (excluding node_modules)
-COPY --exclude=node_modules --exclude=server/node_modules --exclude=client/node_modules . .
+# Copy application code (node_modules excluded by .dockerignore)
+COPY . .
 
 WORKDIR /app
 
