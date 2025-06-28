@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-      - .:/app
+      - ./server:/app/server  # Only mount server directory
     ports:
       - "5174:5173"  # Map host 5174 to container 5173 (Vite)
       - "3001:80"    # Map host 3001 to container 80 (Backend)
