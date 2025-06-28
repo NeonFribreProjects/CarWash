@@ -19,7 +19,7 @@ COPY server/package*.json ./server/
 COPY . .
 
 # Install dependencies using workspace-aware command
-RUN npm ci --workspaces --include-workspace-root
+RUN npm install --workspaces --include-workspace-root --no-audit --prefer-offline
 
 # Back to app root
 WORKDIR /app
