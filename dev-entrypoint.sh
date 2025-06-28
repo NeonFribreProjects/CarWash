@@ -15,7 +15,7 @@ cd /app/server
 
 # In development, reset the database and migrations
 echo "Resetting database and migrations..."
-npx prisma migrate reset --force
+npx prisma migrate reset
 
 # This will:
 # 1. Drop the database
@@ -25,6 +25,14 @@ npx prisma migrate reset --force
 
 echo "Generating Prisma client..."
 npx prisma generate
+
+# Verify Prisma client generation
+if [ ! -d "node_modules/.prisma" ]; then
+  echo "Error: Prisma client was not generated properly"
+  exit 1
+fi
+
+echo "Prisma setup completed successfully"
 
 # Start development servers from project root
 cd /app && npm run dev
