@@ -35,6 +35,9 @@ npx prisma migrate reset --force
 # 4. Seed the database (if a seed file is present)
 
 echo "Generating Prisma client..."
+# Ensure @prisma/client is installed
+npm install @prisma/client
+# Generate the Prisma client
 npx prisma generate
 
 # Verify Prisma client generation
