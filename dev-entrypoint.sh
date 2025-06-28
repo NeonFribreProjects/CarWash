@@ -15,7 +15,26 @@ echo "Database is ready!"
 # All Prisma operations must run from server context
 cd /app/server
 
-# Check if we need to run migrations
+# Ensure we're in the right directory and dependencies are available
+echo "Setting up Prisma environment..."
+pwd
+ls -la node_modules/@prisma/ 2>/dev/null || echo "Prisma client not found in server/node_modules"
+
+# Install dependencies if needed (in case volume mounting caused issues)
+echo "Installing server dependencies..."
+npm install
+
+# Generate Prisma client first
+echo "Generating Prisma client..."
+npx prisma generate
+
+# Verify the client was generated
+if [ ! -d "node_modules/.prisma" ]; then
+  echo "Error: Prisma client was not generated properly"
+  exit 1
+fi
+
+# Check database state
 echo "Checking database state..."
 if npx prisma migrate status --schema=./prisma/schema.prisma | grep -q "Database schema is out of sync"; then
   echo "Database schema is out of sync, running migrations..."
@@ -24,27 +43,15 @@ else
   echo "Database schema is up to date"
 fi
 
-# In development, reset the database and migrations
+# Reset database and migrations (skip generate since we did it above)
 echo "Resetting database and migrations..."
-npx prisma migrate reset --force
+npx prisma migrate reset --force --skip-generate
 
 # This will:
 # 1. Drop the database
 # 2. Create a new database
 # 3. Apply all migrations
 # 4. Seed the database (if a seed file is present)
-
-echo "Generating Prisma client..."
-# Ensure @prisma/client is installed
-npm install @prisma/client
-# Generate the Prisma client
-npx prisma generate
-
-# Verify Prisma client generation
-if [ ! -d "node_modules/.prisma" ]; then
-  echo "Error: Prisma client was not generated properly"
-  exit 1
-fi
 
 echo "Prisma setup completed successfully"
 
