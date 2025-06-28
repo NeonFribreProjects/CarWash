@@ -1,14 +1,19 @@
 # Development image with full development dependencies
 FROM node:20-alpine
 
-# Install dependencies in a single layer
+# Install ALL required dependencies for Prisma + Alpine
 RUN apk add --no-cache \
     git \
     curl \
     openssl \
     openssl-dev \
+    openssl-libs-static \
     netcat-openbsd \
-    libc6-compat
+    libc6-compat \
+    build-base \
+    python3 \
+    make \
+    g++
 
 WORKDIR /app
 
