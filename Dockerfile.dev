@@ -18,16 +18,19 @@ COPY client/package*.json ./client/
 COPY server/package*.json ./server/
 COPY . .
 
-# Force clean installation - remove any existing node_modules
-RUN rm -rf node_modules server/node_modules client/node_modules
+# CRITICAL: Remove ALL node_modules and package-lock files
+RUN rm -rf node_modules server/node_modules client/node_modules \
+    && rm -f package-lock.json server/package-lock.json client/package-lock.json
 
-# Install dependencies using workspace-aware command
-RUN npm install --workspaces --include-workspace-root --no-audit --prefer-offline
+# Install root dependencies WITHOUT workspaces first
+RUN npm install --no-workspaces --no-audit --prefer-offline
 
-# Force reinstall server dependencies to ensure version alignment
-RUN cd server && rm -rf node_modules && npm install --no-audit --prefer-offline
+# Install server dependencies in complete isolation
+RUN cd server && npm install --no-audit --prefer-offline --force
 
-# Back to app root
+# Install client dependencies
+RUN cd client && npm install --no-audit --prefer-offline
+
 WORKDIR /app
 
 # Set permissions for entrypoint
