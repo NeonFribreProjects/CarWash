@@ -12,17 +12,12 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# Copy package files
+# Copy ONLY package files first
 COPY package*.json ./
 COPY client/package*.json ./client/
 COPY server/package*.json ./server/
-COPY . .
 
-# CRITICAL: Remove ALL node_modules and package-lock files
-RUN rm -rf node_modules server/node_modules client/node_modules \
-    && rm -f package-lock.json server/package-lock.json client/package-lock.json
-
-# Install root dependencies WITHOUT workspaces first
+# Install root dependencies WITHOUT workspaces
 RUN npm install --no-workspaces --no-audit --prefer-offline
 
 # Install server dependencies in complete isolation
@@ -30,6 +25,9 @@ RUN cd server && npm install --no-audit --prefer-offline --force
 
 # Install client dependencies
 RUN cd client && npm install --no-audit --prefer-offline
+
+# NOW copy the rest of the application (excluding node_modules)
+COPY --exclude=node_modules --exclude=server/node_modules --exclude=client/node_modules . .
 
 WORKDIR /app
 
