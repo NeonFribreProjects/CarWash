@@ -7,15 +7,26 @@ apk add --no-cache netcat-openbsd
 # Wait for database
 echo "Waiting for database..."
 while ! nc -z db 5432; do
-  sleep 1
+  echo "Database not ready, waiting..."
+  sleep 2
 done
+echo "Database is ready!"
 
 # All Prisma operations must run from server context
 cd /app/server
 
+# Check if we need to run migrations
+echo "Checking database state..."
+if npx prisma migrate status --schema=./prisma/schema.prisma | grep -q "Database schema is out of sync"; then
+  echo "Database schema is out of sync, running migrations..."
+  npx prisma migrate deploy
+else
+  echo "Database schema is up to date"
+fi
+
 # In development, reset the database and migrations
 echo "Resetting database and migrations..."
-npx prisma migrate reset
+npx prisma migrate reset --force
 
 # This will:
 # 1. Drop the database
