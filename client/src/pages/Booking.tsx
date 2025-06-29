@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Calendar } from "../components/ui/calendar";
+import { ModernCalendar } from "../components/ui/modern-calendar";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { ChevronLeft } from "lucide-react";
@@ -115,7 +115,6 @@ const Booking = () => {
   });
 
   console.log('Current time slots:', timeSlots);
-
   console.log('Service data:', service);
 
   if (isLoading) return (
@@ -211,12 +210,11 @@ const Booking = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">Select Date & Time</h2>
             <div className="grid md:grid-cols-2 gap-8">
-              <Calendar
-                mode="single"
+              <ModernCalendar
                 selected={selectedDate}
                 onSelect={setSelectedDate}
-                className="rounded-md border"
                 disabled={(date) => date < new Date()}
+                className="w-full"
               />
 
               <div>
@@ -251,7 +249,7 @@ const Booking = () => {
                   </div>
                 )}
 
-                <div className="space-y-4 mb-6">
+                <div className="space-y-4 mb-6 mt-6">
                   <div>
                     <Label htmlFor="name">Name *</Label>
                     <Input 
