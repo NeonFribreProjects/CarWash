@@ -29,7 +29,7 @@ npm install prisma@5.22.0 @prisma/client@5.22.0 --save --force --no-audit
 
 # Run database migrations to fix schema
 echo "Running database migrations..."
-npx prisma@5.22.0 migrate deploy --force
+npx prisma@5.22.0 migrate deploy
 
 # Generate Prisma client
 echo "Generating Prisma client..."
