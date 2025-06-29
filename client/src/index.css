@@ -79,4 +79,25 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Calendar animations */
+.rdp-day_button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rdp-day_selected .rdp-day_button {
+  animation: pulse 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Smooth transitions for all calendar elements */
+.rdp * {
+  transition: all 0.2s ease-in-out;
 } 
