@@ -203,7 +203,7 @@ const AdminDashboard = () => {
 
           <TabsContent value="Bookings">
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <Tabs defaultValue="Featured" onValueChange={setSelectedCategory}>
+              <Tabs defaultValue="Car Wash Packages" onValueChange={setSelectedCategory}>
                 {/* Mobile Category Selector */}
                 <div className="block sm:hidden mb-6">
                   <select 
