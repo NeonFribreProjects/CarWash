@@ -103,7 +103,7 @@ const Booking = () => {
   }, [service, isLoading, navigate]);
 
   const { data: timeSlots, isLoading: timeSlotsLoading } = useQuery<TimeSlot[]>({
-    queryKey: ['timeSlots', serviceId, selectedDate],
+    queryKey: ['timeSlots', serviceId, selectedDate ? format(selectedDate, 'yyyy-MM-dd') : null],
     queryFn: async () => {
       if (!selectedDate || !serviceId) return [];
       return api.getAvailableTimeSlots(
