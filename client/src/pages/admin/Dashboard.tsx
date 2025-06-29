@@ -23,7 +23,7 @@ import type { Booking } from '../../types/booking';
 const CATEGORIES = ['Car Wash Packages', 'Detailing Services', 'Premium Services'];
 
 const AdminDashboard = () => {
-  const [selectedCategory, setSelectedCategory] = useState('Featured');
+  const [selectedCategory, setSelectedCategory] = useState('Car Wash Packages');
   const queryClient = useQueryClient();
   
   const { data: bookings = [] } = useQuery({
